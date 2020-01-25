@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      body {
+        background-color: rgb(141, 163, 190);
+      }
+      .list {
+        max-width: 800px;
+        margin: 0 auto;
+        flex-direction: column;
+        display: flex;
+        align-items: center;
+        list-style: none;
+      }
+      .list li {
+        margin: 5px 0;
+        padding: 0 50px;
+        background-color: lightgray;
+        border-radius: 100px;
+      }
+      .list li img {
+        padding: 20px;
+        border-radius: 100px;
+      }
+      .xhr-btn {
+        position: fixed;
+        top: 50%;
+        left: 15%;
+      }
+      .axios-btn {
+        position: fixed;
+        top: 50%;
+        right: 15%;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="xhr-btn" onclick="ScrollToBottom()">--XHR--</button>
+    <button class="axios-btn">--Axios--</button>
+    <ul class="list"></ul>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const btnXHR = document.querySelector('.xhr-btn');
+      const btnAxious = document.querySelector('.axios-btn');
+      const list = document.querySelector('.list');
+      //making add images function
+      const showImgs = res => {
+        const el = document.createElement('li');
+        const img = document.createElement('img');
+        img.src = res;
+        img.style.width = '250px';
+        // img.style.height = '350px';
+        el.appendChild(img);
+        list.appendChild(el);
+        window.scrollTo(0, document.body.scrollHeight);
+      };
+
+      //with XMLHttpRequest
+
+      const getImgsXHR = () => {
+        const request = new XMLHttpRequest();
+        request.addEventListener('readystatechange', () => {
+          if (request.readyState === 4 && request.status === 200) {
+            const data = JSON.parse(request.responseText);
+            showImgs(data.message);
+          } else if (request.readyState === 4) {
+            console.log('Could not fetch data');
+          }
+        });
+        request.open('GET', 'https://dog.ceo/api/breeds/image/random');
+        request.send();
+      };
+
+      //with Axios
+
+      const getImgsAxios = () => {
+        axios
+          .get('https://dog.ceo/api/breeds/image/random')
+          .then(function(response) {
+            // handle success
+            showImgs(response.data.message);
+          })
+          .catch(function(error) {
+            // handle error
+            console.log(error, error.response);
+          });
+        // document.body.scrollTop = 0;
+        // document.documentElement.scrollTop = 0;
+        // window.scrollTo(0, document.body.scrollHeight);
+      };
+
+      btnXHR.addEventListener('click', getImgsXHR);
+      btnAxious.addEventListener('click', getImgsAxios);
+    </script>
+  </body>
+</html>

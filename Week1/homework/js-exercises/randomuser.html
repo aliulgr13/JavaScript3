@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <button class="just">Click me</button> -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+      //with XMLHttpRequest
+      const getFriendsXHR = callback => {
+        const request = new XMLHttpRequest();
+        request.addEventListener('readystatechange', () => {
+          if (request.readyState === 4 && request.status === 200) {
+            const data = JSON.parse(request.responseText);
+            callback(undefined, data);
+          } else if (request.readyState === 4) {
+            callback('Could not fetch data', undefined);
+          }
+        });
+        request.open('GET', 'https://www.randomuser.me/api');
+        request.send();
+      };
+
+      getFriendsXHR((err, data) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(data);
+        }
+      });
+
+      //with Axios
+      const getFriendsAxios = () => {
+        axios
+          .get('https://www.randomuser.me/api')
+          .then(function(response) {
+            // handle success
+            console.log(response);
+          })
+          .catch(function(error) {
+            // handle error
+            console.log(error, error.response);
+          });
+      };
+
+      getFriendsAxios();
+    </script>
+  </body>
+</html>
