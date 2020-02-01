@@ -21,10 +21,13 @@
       const getImgsXHR = callback => {
         const request = new XMLHttpRequest();
         request.addEventListener('readystatechange', () => {
-          if (request.readyState === 4 && request.status === 200) {
+          if (
+            request.readyState === XMLHttpRequest.DONE &&
+            request.status === 200
+          ) {
             const data = JSON.parse(request.responseText);
             callback(undefined, data);
-          } else if (request.readyState === 4) {
+          } else if (request.readyState === XMLHttpRequest.DONE) {
             callback('Could not fetch data', undefined);
           }
         });
