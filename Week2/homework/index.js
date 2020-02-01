@@ -2,25 +2,14 @@
 
 {
 
-  // function fetchJSON(url, cb) {
-  //   const xhr = new XMLHttpRequest();
-  //   xhr.open('GET', url);
-  //   xhr.responseType = 'json';
-  //   xhr.onload = () => {
-  //     if (xhr.status >= 200 && xhr.status <= 299) {
-  //       cb(null, xhr.response);
-  //     } else {
-  //       cb(new Error(`Network error: ${xhr.status} - ${xhr.statusText}`));
-  //     }
-  //   };
-  //   xhr.onerror = () => cb(new Error('Network request failed'));
-  //   xhr.send();
-  // }
-
+  //define our main divs
   const mainContainer = document.querySelector('.main-container');
   const repoContainer = document.querySelector('.repo-container');
   const contributorContainer = document.querySelector('.contributors-container');
   const selector = document.getElementById('selector');
+
+  //making api with fetch method.
+  // ı have used async, await methods in this fetch
 
   const fetchJSON = async () => {
 
@@ -31,7 +20,7 @@
     const data = await response.json();
     return data;
   };
-
+  //standard creating function
   function createAndAppend(name, parent, options = {}) {
 
     const elem = document.createElement(name);
@@ -45,12 +34,13 @@
     });
     return elem;
   }
-
+  //using index to be able to add option's valuet to index numbers
   function renderRepoDetails(repo, selector, index) {
     createAndAppend('option', selector, {
       text: repo.name,
       value: index
     });
+    //when open the page this shows first content of selects dive
     if (repo.name === 'alumni') {
       addRepo(repo, repoContainer);
       addContribution(repo)
@@ -67,10 +57,10 @@
             // we can order it with locale compare 
             return A.localeCompare(B);
           })
+        //to make selectors dive
         repos.forEach((repo, index) => renderRepoDetails(repo, selector, index));
-
+        //to change the page when selecting of option
         selector.addEventListener('change', (e) => {
-
           repos.forEach((repo, index) => {
             if (index == e.target.value) {
               addRepo(repo, repoContainer);
@@ -86,49 +76,8 @@
         });
         return;
       })
-
-    // fetchJSON(url, (err, repos) => {
-    //   const root = document.getElementById('root');
-    //   if (err) {
-    //     //to add header when it gives the error
-    //     const header = createAndAppend('div', root);
-    //     header.classList.add('main-header');
-    //     createAndAppend('p', header, {
-    //       text: 'HYF Repositories',
-    //     });
-    //     createAndAppend('div', root, {
-    //       text: err.message,
-    //       class: 'alert-error',
-    //     });
-    //     return;
-    //   }
-
-    //   const header = createAndAppend('div', root);
-    //   header.classList.add('main-header');
-    //   createAndAppend('p', header, {
-    //     text: 'HYF Repositories',
-    //   });
-    //   const ul = createAndAppend('ul', root);
-    //   // repos.forEach(repo => renderRepoDetails(repo, ul));
-    //   repos
-    //     .sort((a, b) => {
-    //       let A = a.name.toUpperCase();
-    //       let B = b.name.toUpperCase();
-    //       // we can order it with locale compare 
-    //       // return A.localeCompare(B);
-    //       if (A < B) {
-    //         return -1;
-    //       }
-    //       if (A > B) {
-    //         return 1;
-    //       }
-    //       return 0;
-    //     })
-    //     .forEach(repo => addRepo(repo, ul));
-
-    // });
   }
-
+  //to add contributors div
   function addContribution(repo) {
 
     createAndAppend('h1', contributorContainer, {
@@ -137,9 +86,12 @@
     contributorContainer.innerText = '';
     const ul = createAndAppend('ul', contributorContainer);
     ul.classList.add('list');
+    //fetchind data from contributors_url of selected repo
+    // ı have used then method in this fetch
     fetch(repo.contributors_url)
       .then(response => response.json())
       .then(data =>
+        // to show all the contributors we've used for each to iterate
         data.forEach(item => {
           const li = createAndAppend("li", ul);
           createAndAppend("img", li, {
@@ -156,7 +108,7 @@
         })
       );
   }
-
+  //to add repositories dives
   function addRepo(repo, repoContainer) {
     const repoList = document.createElement('table');
     repoList.classList.add('style-list')
@@ -183,14 +135,6 @@
   </tr>
       `;
     repoContainer.appendChild(repoList);
-
-    // repolist.innerHTML += `
-    //   <li><div class="heads">Repository:</div><div class='repos'>${repo.name}</div></li>
-    //   <li><div class="heads">Description:</div><div class='repos'>${repo.description}</div></li>
-    //   <li><div class="heads">Forks:</div><div class='repos'>${repo.forks}</div></li>
-    //   <li><div class="heads">Updated:</div><div class='repos'>${repo.updated_at}</div></li>
-    // `;
-
   }
 
   const HYF_REPOS_URL =
