@@ -15,14 +15,14 @@ body {
   width: 80%;
   margin: 0 auto;
 }
-.header {
+.main-header {
   padding: 3%;
   background-color: #3f51b5;
   font-size: 2rem;
   color: white;
   margin-bottom: 10px;
 }
-.repo-select {
+#selector {
   width: 30%;
   padding: 10px 20px;
   margin: 10px 5px;
@@ -57,11 +57,11 @@ body {
   height: auto;
   box-shadow: 3px 3px #dadada;
 }
-ul {
+.list {
   list-style: none;
   margin: 3%;
 }
-ul li {
+.list li {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -69,20 +69,20 @@ ul li {
   margin: 1%;
   border-bottom: 3px solid #dadada;
 }
-ul li img {
+.list li img {
   width: 50px;
 }
-ul li span {
+.list li span {
   border-radius: 10%;
   color: white;
   padding: 7px;
   background-color: gray;
 }
-ul li a {
+.list li a {
   text-decoration: none;
 }
 @media screen and (max-width: 1024px) {
-  .repo-select {
+  #selector {
     width: 50%;
   }
   body {
