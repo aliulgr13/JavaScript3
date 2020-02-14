@@ -75,12 +75,14 @@
             return 1;
           }
           return 0;
-        })
-        // to show first 10 repo of repos
-        .map((repo, index) => {
-          if (index < '10') {
-            addRepo(repo, ul)
-          }
+        });
+      // to show first 10 repo of repos
+      repos.slice(0, 10)
+        .forEach((repo, index) => {
+          // if (index < '10') {
+          //   addRepo(repo, ul)
+          // }
+          addRepo(repo, ul)
         })
 
     });
