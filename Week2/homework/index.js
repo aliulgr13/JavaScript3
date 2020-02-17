@@ -17,8 +17,7 @@
     if (response.status !== 200) {
       throw new Error('can not fetch the data')
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   };
   //standard creating function
   function createAndAppend(name, parent, options = {}) {
@@ -41,8 +40,8 @@
       value: index
     });
     //when open the page this shows first content of selects dive
-    if (repo.name === 'alumni') {
-      addRepo(repo, repoContainer);
+    if (index == '0') {
+      addRepo(repo);
       addContribution(repo)
     }
   }
@@ -63,7 +62,7 @@
         selector.addEventListener('change', (e) => {
           repos.forEach((repo, index) => {
             if (index == e.target.value) {
-              addRepo(repo, repoContainer);
+              addRepo(repo);
               addContribution(repo)
             }
           })
@@ -109,31 +108,29 @@
       );
   }
   //to add repositories dives
-  function addRepo(repo, repoContainer) {
+  function addRepo(repo) {
     const repoList = document.createElement('table');
     repoList.classList.add('style-list')
-    //repoList.innerText = '';
     const newTime = new Date(repo.updated_at).toLocaleString()
     repoContainer.innerText = '';
 
-    repoList.innerHTML += `
-  <tr>
-    <td>Repository:</td>
-    <td><a href="${repo.html_url}" target="_blank">${repo.name}</a></td>
-  </tr>
-  <tr>
-    <td>Description:</td>
-    <td>${repo.description}</td>
-  </tr>
-  <tr>
-    <td>Forks:</td>
-    <td>${repo.forks}</td>
-  </tr>
-  <tr>
-    <td>Updated:</td>
-    <td>${newTime}</td>
-  </tr>
-      `;
+    const th = createAndAppend("tr", repoList);
+    createAndAppend('td', th, { text: 'Repository :' });
+    const tdmain = createAndAppend('td', th);
+    createAndAppend('a', tdmain, {
+      text: repo.name,
+      href: repo.html_url
+    })
+    const tr1 = createAndAppend("tr", repoList);
+    createAndAppend('td', tr1, { text: 'Description :' });
+    createAndAppend('td', tr1, { text: repo.description });
+    const tr2 = createAndAppend("tr", repoList);
+    createAndAppend('td', tr2, { text: 'Forks :' });
+    createAndAppend('td', tr2, { text: repo.forks });
+    const tr3 = createAndAppend("tr", repoList);
+    createAndAppend('td', tr3, { text: 'Updated :' });
+    createAndAppend('td', tr3, { text: newTime });
+
     repoContainer.appendChild(repoList);
   }
 
