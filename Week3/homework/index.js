@@ -1,6 +1,9 @@
 'use strict';
 
 {
+  //to define amount of fetched repositories dynamically I create base and query vaiable
+  const base = 'https://api.github.com/orgs/HackYourFuture/repos';
+
 
   //define our main divs
   const mainContainer = document.querySelector('.main-container');
@@ -12,11 +15,13 @@
   //week 3
   // ı have used async, await methods and try and catch in this axios method
 
-  const fetchJSON = async () => {
+  const fetchJSON = async (repositoriesAmount) => {
     try {
+      //to define amount of fetched repositories dynamically I create base and query vaiable and concatenate them in HYF_REPOS_URL
+      const query = `?per_page=${repositoriesAmount}`
+      const HYF_REPOS_URL = base + query;
       const response = await axios.get(HYF_REPOS_URL);
       const data = response.data;
-      console.log(data)
       return data;
     } catch (error) {
       errorHandler(error)
@@ -29,7 +34,7 @@
       text: error.response.status + error.response.statusText,
       class: 'alert-error',
     });
-    return console.log(error.response);
+    console.log(error.response);
   }
 
   //standard creating function
@@ -60,13 +65,13 @@
   }
   //week 3 make it async await and try and catch
   async function main() {
-
-    const repos = await fetchJSON()
+    ////to define amount of fetched repositories dynamically I called function in here with wanted repositories amount.
+    const repos = await fetchJSON(100)
     repos.sort((a, b) => {
-      let A = a.name.toUpperCase();
-      let B = b.name.toUpperCase();
+      const firstRepo = a.name.toUpperCase();
+      const secondRepo = b.name.toUpperCase();
       // we can order it with locale compare 
-      return A.localeCompare(B);
+      return firstRepo.localeCompare(secondRepo);
     })
     //to make selectors dive
     repos.forEach((repo, index) => renderRepoDetails(repo, selector, index));
@@ -113,11 +118,8 @@
       })
     } catch (error) {
       console.log(error)
-      mainContainer.style.display = 'none';
-      createAndAppend('div', root, {
-        text: error,
-        class: 'alert-error',
-      });
+      //ı have added error handling here
+      errorHandler(error);
     }
 
 
@@ -126,7 +128,6 @@
   function addRepo(repo, repoContainer) {
     const repoList = document.createElement('table');
     repoList.classList.add('style-list')
-    //repoList.innerText = '';
     const newTime = new Date(repo.updated_at).toLocaleString()
     repoContainer.innerText = '';
 

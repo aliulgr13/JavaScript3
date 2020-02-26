@@ -46,6 +46,5 @@
     }
   }
 
-  let at = new ContributorsView()
   window.ContributorsView = ContributorsView;
 }
